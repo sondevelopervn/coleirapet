@@ -59,7 +59,7 @@ class _ScanScreenState extends State<ScanScreen> {
         qrText = scanData;
 
         // Neste Navigator, será transportado dessa tela para a tela de pesquisa o testo do qrcode
-        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SearchPet(qrText)));
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>SearchPet(qrText)));
       });
     });
   }
