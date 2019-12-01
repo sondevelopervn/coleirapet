@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-
 import 'models/loginmodel.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -14,7 +13,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passController = TextEditingController();
-  //final _phoneController = TextEditingController();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
 

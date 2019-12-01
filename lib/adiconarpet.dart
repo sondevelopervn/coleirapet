@@ -82,7 +82,8 @@ class _AddPetState extends State<AddPet> {
                       ),
                     ),
                   ) : Container(
-                    child: InkWell( child: Text("* Imagem selecionada, clique aqui se deseja alterar * ", style: TextStyle(fontStyle: FontStyle.italic, color: Theme.of(context).primaryColor)),
+                    child: InkWell( child: Text("* Imagem selecionada, clique aqui se deseja alterar * ",
+                        style: TextStyle(fontStyle: FontStyle.italic, color: Theme.of(context).primaryColor)),
                       onTap: (){
                         setState(() {
                           _pickedImage = null;
@@ -207,7 +208,8 @@ class _AddPetState extends State<AddPet> {
               ),
             ),
             SizedBox(height: 10,),
-            Text("O processo de envio pode demorar*", style: TextStyle(fontStyle: FontStyle.italic, color: Theme.of(context).primaryColor),)
+            Text("O processo de envio pode demorar*", style: TextStyle(fontStyle: FontStyle.italic,
+                color: Theme.of(context).primaryColor),)
           ],
         ),
       ),

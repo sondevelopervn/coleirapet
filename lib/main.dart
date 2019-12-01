@@ -1,14 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import 'adiconarpet.dart';
-import 'criarconta.dart';
 import 'drawer.dart';
-import 'login.dart';
 import 'models/loginmodel.dart';
 
 void main() => runApp(MyApp());

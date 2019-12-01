@@ -2,7 +2,6 @@ import 'package:coleirapet/login.dart';
 import 'package:coleirapet/scan_qrcode.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-
 import 'models/loginmodel.dart';
 
 class DrawerScreen extends StatefulWidget {
