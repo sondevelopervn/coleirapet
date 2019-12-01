@@ -8,25 +8,32 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  // key para o Form
   final _formKey = GlobalKey<FormState>();
 
+  // controllers para os TextFormField
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passController = TextEditingController();
+
+  // key para o Scaffold
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
 
   @override
   Widget build(BuildContext context) {
+    // inicio da tela de layout
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text("Criar conta"),
         centerTitle: true,
       ),
+      // ScopedModelDescendant serve para verificar o estado do usuário, se está logado ou não, pegar informações como nome, idade...
       body: ScopedModelDescendant<UserModel>(
           builder: (context, child, model){
 
+            // verifica se está carregando ou não para poder exibir o indicador (os dados estão em loginmodel.dart)
             if(model.isLoading)
               return Center(child: CircularProgressIndicator(),);
 
@@ -36,6 +43,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 padding: EdgeInsets.all(16),
                 children: <Widget>[
                   TextFormField(
+                    //com o controller, se o campo for vazío, vai retornar uma mensagem ao clicar em enviar (todos os TextFormField possuem isso)
                     controller: _nameController,
                     decoration: InputDecoration(
                         hintText: "nome"
@@ -71,13 +79,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: 44,
                     child: RaisedButton(
                       onPressed: (){
+                        // verifica se todos os campos estão preenchidos
                         if(_formKey.currentState.validate()){
 
                           Map<String, dynamic> userData = {
+                            // salva no Map do modelo usuário as informações de e-mail e senha
                             "name": _nameController.text,
                             "email": _emailController.text,
                           };
 
+                          // chama a função signUp em loginmodel.dart
                           model.signUp(
                               userData: userData,
                               pass: _passController.text,
@@ -100,6 +111,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  // essa função é responsável por informar ao usuário que foi criado com sucesso
   void _onSuccess(){
       _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Usuário criado com sucesso!"),
       backgroundColor: Theme.of(context).primaryColor,
@@ -111,6 +123,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       });
   }
 
+  // se houve algum erro no envio dos dados, apresentará esta mensagem
   void _onFail(){
     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Erro ao criar usuário!"),
       backgroundColor: Colors.red,

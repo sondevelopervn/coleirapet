@@ -14,12 +14,23 @@ class AddPet extends StatefulWidget {
 
 class _AddPetState extends State<AddPet> {
 
+  // String que recebe a URL de download da imagem
   String urlImage;
+
+  // variável que verifica se a imagem está sendo enviada para o Storage
   bool isSending = false;
 
+  // variável para salvar o nome do arquivo gerado no Storage
+  String nameDoc = "";
+
+  // variável para salvar a imagem
   File _pickedImage;
+
+  // verifica se existe uma imagem selecionada
   bool imgSelected = false;
 
+
+  // função que captura a imagem
   Future<File> getImageFromCamera() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {
@@ -29,25 +40,30 @@ class _AddPetState extends State<AddPet> {
     return image;
   }
 
+  // controladores para os TextFormField
   final _nomecontroller = TextEditingController();
   final _racacontroller = TextEditingController();
   final _sexocontroller = TextEditingController();
   final _telefonecontroller = TextEditingController();
   final _desciptioncontroller = TextEditingController();
   final _cidadecontroller = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  String nameDoc = "";
+  // key para o Form
+  final _formKey = GlobalKey<FormState>();
+
+  // Key para o Scaffold
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
+    // inicio da tela de layou com o scaffold
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text("Adicionar Pet"),
         centerTitle: true,
       ),
+      // aqui, verifica se está enviando a imagem, se estiver, ele retornará um indicador de envio, senão, retorna o Form
       body: isSending == true ? Center(child: CircularProgressIndicator(),) : Form(
         key: _formKey,
         child: ListView(
@@ -73,6 +89,7 @@ class _AddPetState extends State<AddPet> {
             InkWell(
                 child: Align(
                   alignment: Alignment.topLeft,
+                  // se a imagem foi selecionada, vai retornar um Text, senão, vai retornar o campo para inserir a mesma
                   child: !imgSelected ? Container(
                     width: 150,
                     height: 100,
@@ -86,6 +103,7 @@ class _AddPetState extends State<AddPet> {
                         style: TextStyle(fontStyle: FontStyle.italic, color: Theme.of(context).primaryColor)),
                       onTap: (){
                         setState(() {
+                          // seta os valores da variáveis como null e false
                           _pickedImage = null;
                           imgSelected = false;
                         });
@@ -93,13 +111,18 @@ class _AddPetState extends State<AddPet> {
                     ),
                   ),
                 ),
+              // nesse on tap, está chamando a função para a abrir a camera
               onTap: getImageFromCamera,
             ),
             SizedBox(height: 15,),
+
+            //inicio dos TextFormField
+            // controller serve para pegar o texto do campo
             TextFormField(
               controller: _nomecontroller,
               decoration: InputDecoration(hintText: "atende pelo nome de"),
               validator: (text) {
+                //com o controller, se o campo for vazío, vai retornar uma mensagem ao clicar em enviar (todos os TextFormField possuem isso)
                 if (text.isEmpty) return "campo inválido";
               },
             ),
@@ -164,6 +187,7 @@ class _AddPetState extends State<AddPet> {
               alignment: Alignment.bottomRight,
               child:
                 MaterialButton(
+                  // botão que limpa a tela, apaga o texto dos campos de textos e deixa como null e false as informações de imagem
                   child: Text("Limpar"),
                   onPressed: (){
                     setState(() {
@@ -191,6 +215,7 @@ class _AddPetState extends State<AddPet> {
                   style: TextStyle(color: Colors.white, fontSize: 25),
                 ),
                 onPressed: () {
+                  // verifica se a imagem foi ou não inserida, se não foi, vai retornar um snackBar
                   if(urlImage == ""){
                     _scaffoldKey.currentState.showSnackBar(SnackBar(
                       content: Text("Imagem não inserida!"),
@@ -199,8 +224,11 @@ class _AddPetState extends State<AddPet> {
                     ));
                   }
                   else if (_formKey.currentState.validate()) {
+                    // se a imagem foi inserida e todos os campos preenchidos, vai entrar nesse if
+                    // vai chamar a função enviar(context), função responsável pelo envio da imagem ao Storage
                     enviar(context);
                     setState(() {
+                      // informa que está enviando para poder exibir o indicador na tela
                       isSending = true;
                     });
                   }
@@ -218,19 +246,21 @@ class _AddPetState extends State<AddPet> {
 
   Future enviar(BuildContext context) async {
 
-    StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(DateTime.now().millisecondsSinceEpoch.toString());
-    StorageUploadTask uploadTask =  firebaseStorageRef.putFile(_pickedImage);
-    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-    String url = await taskSnapshot.ref.getDownloadURL();
-    String idImg = await taskSnapshot.ref.getName();
+    // nesta função, primeiro pega a imagem e envia para o storage, depois retorna a URL de download para poder salvar no Firestore
 
-    print(idImg);
+    StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(DateTime.now().millisecondsSinceEpoch.toString()); // designa o local e nome do arquivo
+    StorageUploadTask uploadTask =  firebaseStorageRef.putFile(_pickedImage); // envia foto
+    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete; // aguardar finalizar o envio
+    String url = await taskSnapshot.ref.getDownloadURL(); // recupera a URL de download
+    String idImg = await taskSnapshot.ref.getName(); // recupera o nome da imagem
 
     setState(() {
+      // seta o estado das variáveis abaixo para poder salvar no Firestore
       urlImage = url;
       nameDoc = idImg;
     });
 
+    // formatando data para exibir como data de publicação
     DateTime now = DateTime.now();
     String formattedDate =
     DateFormat(' dd/MM/y - HH:mm').format(now);
@@ -238,7 +268,9 @@ class _AddPetState extends State<AddPet> {
   }
 
   Future savePet(String date, String url) async {
+    // inicia o envio para o firestore e salva no Firestore com o nome da imagem enviada
     await Firestore.instance.collection("pets").document(nameDoc).setData({
+      // abaixo, onde está ...controller.text são os campos de texto,
       "nome": _nomecontroller.text,
       "raca": _racacontroller.text,
       "sexo": _sexocontroller.text,
@@ -246,9 +278,12 @@ class _AddPetState extends State<AddPet> {
       "cidade": _cidadecontroller.text,
       "sexo": _sexocontroller.text,
       "telefone": _telefonecontroller.text,
-      "img": url,
-      "datapublicacao": date.toString(),
-      "idPet": nameDoc
+      "img": url, // nome da imagem recuperada na função enviar(context)
+      "datapublicacao": date.toString(), // data formatada
+      "idPet": nameDoc // nome da imagem no storage
+
+      // o nome da imagem no Storage foi um meio para poder fazer a pesquisa de um uníco item posteriormente
+
     });
     _scaffoldKey.currentState.showSnackBar(SnackBar(
       content: Text("Pet inserido com sucesso!"),

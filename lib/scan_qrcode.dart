@@ -9,14 +9,19 @@ class ScanScreen extends StatefulWidget {
 }
 
 class _ScanScreenState extends State<ScanScreen> {
+
+  // key para o controller
   GlobalKey qrKey = GlobalKey();
 
+  // variável que salvará o texto do QRCode
   var qrText;
 
   QRViewController controller;
 
   @override
   Widget build(BuildContext context) {
+
+    // inicio da tela de layout
     return Scaffold(
       body: Column(
         children: <Widget>[
@@ -34,10 +39,6 @@ class _ScanScreenState extends State<ScanScreen> {
               onQRViewCreated: _onQrViewCreate,
             ),
           ),
-//          Expanded(
-//            flex: 1,
-//            child: Center(child: Text("Scan result: $qrText"),),
-//          )
         ],
       ),
     );
@@ -50,14 +51,14 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 
 
-
+  // função que vai ler o QRCode e retornar o texto
   void _onQrViewCreate(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData){
       setState(() {
         qrText = scanData;
 
-        //Double qr = qrText.floorToDouble();
+        // Neste Navigator, será transportado dessa tela para a tela de pesquisa o testo do qrcode
         Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SearchPet(qrText)));
       });
     });

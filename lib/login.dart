@@ -11,13 +11,20 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
+  // controller para os campos TextFormField
   final _emailController = TextEditingController();
   final _passController = TextEditingController();
+
+  // key para o Scaffold
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  // key para o Form
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
+
+    // inicio da tela de layout
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -35,6 +42,8 @@ class _LoginScreenState extends State<LoginScreen> {
           )
         ],
       ),
+
+      // aqui também utiliza o ScopedModelDescendant para verificar os dados do usuário
       body: ScopedModelDescendant<UserModel>(
           builder: (context, child, model){
             if(model.isLoading)
@@ -45,6 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: EdgeInsets.all(16),
                 children: <Widget>[
                   TextFormField(
+                    //com o controller, se o campo for vazío, vai retornar uma mensagem ao clicar em enviar (todos os TextFormField possuem isso)
                     controller: _emailController,
                     decoration: InputDecoration(
                         hintText: "e-mail"
@@ -95,6 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         }
 
+                        // chama a função signIn que está em loginmodel.dart
                         model.signIn(
                           email: _emailController.text,
                           pass: _passController.text,
@@ -116,10 +127,12 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  // essa função é responsável por informar ao usuário que foi criado com sucesso
   void _onSuccess(){
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyApp()));
   }
 
+  // se houve algum erro no envio dos dados, apresentará esta mensagem
   void _onFail(){
     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Erro ao logar!"),
       backgroundColor: Colors.red,

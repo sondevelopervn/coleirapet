@@ -12,6 +12,10 @@ class DrawerScreen extends StatefulWidget {
 class _DrawerScreenState extends State<DrawerScreen> {
   @override
   Widget build(BuildContext context) {
+
+    // para evitar ficar criando o Drawer em todos os scaffold de todas as telas, cria um separado e só chama a Classe DrawerScreen
+
+    // inicio do Drawer
     return Drawer(
       child: ListView(
         // Important: Remove any padding from the ListView.
@@ -31,6 +35,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    // verifica se possui usuário logado com o ScopedModelDescendant
                     Text("Olá, ${!model.isLoggedIn() ? "" : model.userData["name"]}",
                         style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),

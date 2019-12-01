@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'adiconarpet.dart';
 import 'drawer.dart';
 import 'models/loginmodel.dart';
@@ -12,13 +13,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    // inicio do aplicativo
+    // antes de tudo, o ScopedModel<UserData> está inseri aí para poder ser acessado de todas as classe que estiver abaixo
+    // portanto, tudo que estiver dentro do MaterialApp tem acesso aos dados do usuário utilizando o ScopedModelDescendant
+
     return ScopedModel<UserModel>(
-      model: UserModel(),
+      model: UserModel(), // definindo o modelo do ScopedModel
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'ColeiraPet',
+        title: 'ColeiraPet', // nome do app
         theme: ThemeData(
-          primarySwatch: Colors.deepOrange,
+          primarySwatch: Colors.deepOrange, // definindo uma cor padrão
         ),
         home: MyHomePage(title: 'Coleirapet'),
       ),
@@ -40,8 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
-
-
+    // inicio da tela de layout
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -52,6 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           children: <Widget>[
             Expanded(
+              // função StreamBuilder que pega os dados do Firestore e se houver alguma mudança atualiza automaticamente
+              // stream, fica ouvindo o Firestore
               child: StreamBuilder(
                 stream: Firestore.instance.collection("pets").snapshots(),
                 builder: (context, snapshot) {
@@ -87,6 +93,9 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class BuscaPets extends StatelessWidget {
+
+  // classe para contruir a tela que exibirá os dados do Firestore
+  // aqui serão exibidos os dados dentro do card
 
   final Map<String, dynamic> data;
 
@@ -160,7 +169,22 @@ class BuscaPets extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            Text("Contato: " + data["telefone"], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text("Contato: " + data["telefone"], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+
+                // neste IconButton, o usuário pode ligar para o número que está sendo exibido no Card
+                IconButton(
+                  hoverColor: Colors.red,
+                  icon: Icon(Icons.call, size: 30, color: Colors.green),
+                  onPressed: (){
+                    var telefone = data["telefone"];
+                    launch('tel:$telefone');
+                  },
+                )
+              ],
+            ),
             SizedBox(
               height: 20,
             ),
