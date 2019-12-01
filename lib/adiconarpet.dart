@@ -94,6 +94,7 @@ class _AddPetState extends State<AddPet> {
                 ),
               onTap: getImageFromCamera,
             ),
+            SizedBox(height: 15,),
             TextFormField(
               controller: _nomecontroller,
               decoration: InputDecoration(hintText: "atende pelo nome de"),

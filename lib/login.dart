@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import 'criarconta.dart';
+import 'main.dart';
 import 'models/loginmodel.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -117,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onSuccess(){
-    Navigator.of(context).pop();
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyApp()));
   }
 
   void _onFail(){
