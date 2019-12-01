@@ -38,6 +38,8 @@ class _AddPetState extends State<AddPet> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  String nameDoc = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,6 +157,26 @@ class _AddPetState extends State<AddPet> {
                 if (text.isEmpty) return "campo inválido";
               },
             ),
+            SizedBox(height: 10,),
+            Align(
+              alignment: Alignment.bottomRight,
+              child:
+                MaterialButton(
+                  child: Text("Limpar"),
+                  onPressed: (){
+                    setState(() {
+                      _nomecontroller.text = "";
+                      _racacontroller.text = "";
+                      _sexocontroller.text = "";
+                      _desciptioncontroller.text = "";
+                      _cidadecontroller.text = "";
+                      _telefonecontroller.text = "";
+                      _pickedImage = null;
+                      imgSelected = false;
+                    });
+                  },
+                )
+            ),
             SizedBox(
               height: 25,
             ),
@@ -197,9 +219,13 @@ class _AddPetState extends State<AddPet> {
     StorageUploadTask uploadTask =  firebaseStorageRef.putFile(_pickedImage);
     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
     String url = await taskSnapshot.ref.getDownloadURL();
+    String idImg = await taskSnapshot.ref.getName();
+
+    print(idImg);
 
     setState(() {
       urlImage = url;
+      nameDoc = idImg;
     });
 
     DateTime now = DateTime.now();
@@ -209,7 +235,7 @@ class _AddPetState extends State<AddPet> {
   }
 
   Future savePet(String date, String url) async {
-    await Firestore.instance.collection("pets").document().setData({
+    await Firestore.instance.collection("pets").document(nameDoc).setData({
       "nome": _nomecontroller.text,
       "raca": _racacontroller.text,
       "sexo": _sexocontroller.text,
@@ -219,7 +245,7 @@ class _AddPetState extends State<AddPet> {
       "telefone": _telefonecontroller.text,
       "img": url,
       "datapublicacao": date.toString(),
-      "idPet": DateTime.now().millisecondsSinceEpoch.toString()
+      "idPet": nameDoc
     });
     _scaffoldKey.currentState.showSnackBar(SnackBar(
       content: Text("Pet inserido com sucesso!"),

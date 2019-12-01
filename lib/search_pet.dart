@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'main.dart';
+
 class SearchPet extends StatefulWidget {
   final textScanner;
 
@@ -11,6 +13,8 @@ class SearchPet extends StatefulWidget {
 }
 
 class _SearchPetState extends State<SearchPet> {
+
+
 
   final String textSearch;
 
@@ -25,43 +29,39 @@ class _SearchPetState extends State<SearchPet> {
         appBar: AppBar(
           title: Text("Busca de Pets"),
           centerTitle: true,
+          automaticallyImplyLeading: false,
         ),
         body: Container(
           padding: EdgeInsets.all(10),
-          child:
-          //!qrOk ?
-         // Center(child: Text("este é o código: $textSearch"),)
-              //:
-          Column(
+          child: Column(
             children: <Widget>[
               Expanded(
-                child: FutureBuilder(
-                  future: Firestore.instance
-                      .collection('pets')
-                      .where((textSearch){
-                      textSearch["idPet"];
-                    })
-                      .getDocuments(),
+                child: StreamBuilder(
+                  stream: Firestore.instance.collection("pets").where("idPet", isEqualTo: textSearch).snapshots(),
                   builder: (context, snapshot) {
-                    switch (snapshot.connectionState) {
+                    switch(snapshot.connectionState){
                       case ConnectionState.none:
-                      case ConnectionState.waiting:
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
+                      //case ConnectionState.waiting:
+                        return Center(child: CircularProgressIndicator(),);
                       default:
                         return ListView.builder(
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
                             itemCount: snapshot.data.documents.length,
                             itemBuilder: (context, index) {
-                              return Container(
-                                  child: BuscaPets(
-                                      snapshot.data.documents[index]));
-                            });
+                              return Container(child: BuscaPets(snapshot.data.documents[index].data));
+                            }
+                        );
                     }
                   },
                 ),
+              ),
+              RaisedButton(
+                child: Text("Voltar ao menu principal!", style: TextStyle(color: Colors.white),),
+                onPressed: (){
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyApp()));
+                },
+                color: Theme.of(context).primaryColor,
               )
             ],
           ),
