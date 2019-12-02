@@ -57,7 +57,7 @@ class _ScanScreenState extends State<ScanScreen> {
     controller.scannedDataStream.listen((scanData){
       setState(() {
         qrText = scanData;
-
+        controller?.pauseCamera();
         // Neste Navigator, será transportado dessa tela para a tela de pesquisa o testo do qrcode
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>SearchPet(qrText)));
       });
