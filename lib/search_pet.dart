@@ -45,6 +45,8 @@ class _SearchPetState extends State<SearchPet> {
                   // função para pegar o documento com o mesmo nome do texto QRCode
                   stream: Firestore.instance.collection("pets").where("idPet", isEqualTo: textSearch).snapshots(),
                   builder: (context, snapshot) {
+                    // verifica se a busca é nula e retorna um indicador de progresso
+                    if(snapshot.data == null) return Center(child: CircularProgressIndicator());
                     switch(snapshot.connectionState){
                       case ConnectionState.none:
                       //case ConnectionState.waiting:
@@ -55,7 +57,11 @@ class _SearchPetState extends State<SearchPet> {
                             shrinkWrap: true,
                             itemCount: snapshot.data.documents.length,
                             itemBuilder: (context, index) {
-                              return Container(child: BuscaPets(snapshot.data.documents[index].data));
+                              var tamanho = snapshot.data.documents.length;
+                              if(snapshot.data.documents == null){
+                                return Container(child: Center(child: Text("Nenhum dado"),),);
+                              }
+                              return Container(child: BuscaPets(snapshot.data.documents[index].data, tamanho));
                             }
                         );
                     }
@@ -82,11 +88,13 @@ class BuscaPets extends StatelessWidget {
   // assim como na tela de listagem (MyApp - main), essa faz a mesma coisa, pega os dados e exibe dentro de um card
   final Map<dynamic, dynamic> data;
 
-  BuscaPets(this.data);
+  final int tamanho;
+
+  BuscaPets(this.data, this.tamanho);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return tamanho == null || tamanho <= 1 ? Center(child: Text("Nenhum dado")) : Card(
       margin: EdgeInsets.only(bottom: 20),
       elevation: 4,
       child: Column(
@@ -131,7 +139,7 @@ class BuscaPets extends StatelessWidget {
               children: <Widget>[
                 Text("Raça: ",
                     style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                    TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 Text(data["raca"], style: TextStyle(fontSize: 20))
               ],
             ),
@@ -146,7 +154,7 @@ class BuscaPets extends StatelessWidget {
                   TextSpan(
                       text: 'Descrição: ',
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   TextSpan(
                       text: data["descricao"],
                       style: TextStyle(

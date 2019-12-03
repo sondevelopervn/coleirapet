@@ -60,6 +60,7 @@ class _ScanScreenState extends State<ScanScreen> {
         // chamando a função abaixo, faz com que não ocorra erro na hora de transição tela para outra
         // a camera aberta em segundo plano faz com que o app tenha travamentos
         controller?.pauseCamera();
+        controller?.dispose();
         // Neste Navigator, será transportado dessa tela para a tela de pesquisa o testo do qrcode
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>SearchPet(qrText)));
       });

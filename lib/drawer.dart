@@ -18,7 +18,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
     // inicio do Drawer
     return Drawer(
       child: ListView(
-        // Important: Remove any padding from the ListView.
+        // Importante, remover os paddings do list view
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
@@ -50,7 +50,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                             fontWeight: FontWeight.bold),
                       ),
                       onTap: (){
-                        if(model.isLoggedIn())
+                        if(!model.isLoggedIn())
                           Navigator.of(context).push(MaterialPageRoute(builder: (context)=>LoginScreen()));
                         else{
                           model.signOut();

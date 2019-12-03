@@ -72,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           itemCount: snapshot.data.documents.length,
                           itemBuilder: (context, index) {
                             return Container(child: BuscaPets(snapshot.data.documents[index].data));
+
                           }
                       );
                   }
@@ -97,99 +98,101 @@ class BuscaPets extends StatelessWidget {
   // classe para contruir a tela que exibirá os dados do Firestore
   // aqui serão exibidos os dados dentro do card
 
+
   final Map<String, dynamic> data;
 
   BuscaPets(this.data);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.only(bottom: 20),
-      elevation: 4,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-                width: 350,
-                height: 200,
-                child: Image.network(
-                  data["img"],
-                  fit: BoxFit.cover,
-                )
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Text("Publicado em: " + data["datapublicacao"], textAlign: TextAlign.right,),
-//                  Text(data[getCurrentTag()]),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: <Widget>[
-                Text("Atende pelo nome de: ",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                Text(data["nome"], style: TextStyle(fontSize: 20))
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: <Widget>[
-                Text("Raça: ", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
-                ),
-                Text(data["raca"], style: TextStyle(fontSize: 20))
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            RichText(
-              text: TextSpan(
-                text: '',
-                style: DefaultTextStyle.of(context).style,
-                children: <TextSpan>[
-                  TextSpan(text: 'Descrição: ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  TextSpan(text: data["descricao"], style: TextStyle(fontSize: 20,)),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Text("Cidade: " + data["cidade"], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text("Contato: " + data["telefone"], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
 
-                // neste IconButton, o usuário pode ligar para o número que está sendo exibido no Card
-                IconButton(
-                  hoverColor: Colors.red,
-                  icon: Icon(Icons.call, size: 30, color: Colors.green),
-                  onPressed: (){
-                    var telefone = data["telefone"];
-                    launch('tel:$telefone');
-                  },
-                )
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-          ]
-      ),
-    );
+    return Card(
+          margin: EdgeInsets.only(bottom: 20),
+          elevation: 4,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                    width: 350,
+                    height: 200,
+                    child: Image.network(
+                      data["img"],
+                      fit: BoxFit.cover,
+                    )
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Text("Publicado em: " + data["datapublicacao"], textAlign: TextAlign.right,),
+//                  Text(data[getCurrentTag()]),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: <Widget>[
+                    Text("Atende pelo nome de: ",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    Text(data["nome"], style: TextStyle(fontSize: 20))
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: <Widget>[
+                    Text("Raça: ", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+                    ),
+                    Text(data["raca"], style: TextStyle(fontSize: 20))
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                RichText(
+                  text: TextSpan(
+                    text: '',
+                    style: DefaultTextStyle.of(context).style,
+                    children: <TextSpan>[
+                      TextSpan(text: 'Descrição: ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      TextSpan(text: data["descricao"], style: TextStyle(fontSize: 20,)),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text("Cidade: " + data["cidade"], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text("Contato: " + data["telefone"], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+
+                    // neste IconButton, o usuário pode ligar para o número que está sendo exibido no Card
+                    IconButton(
+                      hoverColor: Colors.red,
+                      icon: Icon(Icons.call, size: 30, color: Colors.green),
+                      onPressed: (){
+                        var telefone = data["telefone"];
+                        launch('tel:$telefone');
+                      },
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+              ]
+          ),
+        );
   }
 }
