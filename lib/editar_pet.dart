@@ -228,10 +228,6 @@ class _EditedPetState extends State<EditedPet> {
                   });
                 },
               )),
-
-          SizedBox(
-            height: 25,
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[

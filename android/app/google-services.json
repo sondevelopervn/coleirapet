@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "719516583451",
-    "firebase_url": "https://coleirapet-2b3b2.firebaseio.com",
-    "project_id": "coleirapet-2b3b2",
-    "storage_bucket": "coleirapet-2b3b2.appspot.com"
+    "project_number": "845423196767",
+    "firebase_url": "https://coleirapet-3e82a.firebaseio.com",
+    "project_id": "coleirapet-3e82a",
+    "storage_bucket": "coleirapet-3e82a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:719516583451:android:15e8e3d89de279ad64dabe",
+        "mobilesdk_app_id": "1:845423196767:android:d06f375e85191724e379ea",
         "android_client_info": {
           "package_name": "fatecapp.com.br.coleirapet"
         }
       },
       "oauth_client": [
         {
-          "client_id": "719516583451-gf5mrs3ku4q8jvu6v2rukle4v8r21hjq.apps.googleusercontent.com",
+          "client_id": "845423196767-dm61j6sd9q40rpkqm7q3oniiiu3upt9i.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDWOAIK9jh6GmUsVhUBMg7y7VqjQnOL_cM"
+          "current_key": "AIzaSyCmgbxxxKsFnKy5IGdmEhu7pDoZZHUirhg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "719516583451-gf5mrs3ku4q8jvu6v2rukle4v8r21hjq.apps.googleusercontent.com",
+              "client_id": "845423196767-dm61j6sd9q40rpkqm7q3oniiiu3upt9i.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
