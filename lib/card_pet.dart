@@ -124,21 +124,24 @@ class _CardPetState extends State<CardPet> {
                           SizedBox(
                             height: 20,
                           ),
-                          RichText(
-                            text: TextSpan(
-                              text: '',
-                              style: DefaultTextStyle.of(context).style,
-                              children: <TextSpan>[
-                                TextSpan(
-                                    text: 'Descrição: ',
-                                    style: TextStyle(
-                                        fontSize: 20, fontWeight: FontWeight.bold)),
-                                TextSpan(
-                                    text: data["descricao"],
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                    )),
-                              ],
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: RichText(
+                              text: TextSpan(
+                                text: '',
+                                style: DefaultTextStyle.of(context).style,
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: 'Descrição: ',
+                                      style: TextStyle(
+                                          fontSize: 20, fontWeight: FontWeight.bold)),
+                                  TextSpan(
+                                      text: data["descricao"],
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      )),
+                                ],
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -166,7 +169,7 @@ class _CardPetState extends State<CardPet> {
                             ],
                           ),
                           SizedBox(
-                            height: 20,
+                            height: 15,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

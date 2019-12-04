@@ -261,7 +261,6 @@ class _AddPetState extends State<AddPet> {
               InputDecoration(hintText: "atende pelo nome de"),
               validator: (text) {
                 //com o controller, se o campo for vazío, vai retornar uma mensagem ao clicar em enviar (todos os TextFormField possuem isso)
-
                 if (text.isEmpty) return "campo inválido";
               },
             ),
@@ -430,7 +429,7 @@ class _AddPetState extends State<AddPet> {
 
   Future savePet(String date, String url) async {
     // inicia o envio para o firestore e salva no Firestore com o nome da imagem enviada
-    await Firestore.instance.collection("pets").document(nameDoc).setData({
+    await Firestore.instance.collection("pets").document().setData({
       // abaixo, onde está ...controller.text são os campos de texto,
       "nome": _nomecontroller.text,
       "raca": _racacontroller.text,
