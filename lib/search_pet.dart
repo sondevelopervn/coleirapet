@@ -1,14 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
+
 import 'package:url_launcher/url_launcher.dart';
+
+import 'card_pet.dart';
 import 'main.dart';
 
 class SearchPet extends StatefulWidget {
-
   // variável para receber o dado do QRCode
+
   final textScanner;
 
   // contrutor da classe
+
   const SearchPet(this.textScanner);
 
   @override
@@ -16,20 +21,22 @@ class SearchPet extends StatefulWidget {
 }
 
 class _SearchPetState extends State<SearchPet> {
-
-
   // aqui é exibido o texto do QRCode
+
   final String textSearch;
 
   // verifica se possui algum texto
+
   bool qrOk = false;
 
   // contrutor da classe
+
   _SearchPetState(this.textSearch);
 
   @override
   Widget build(BuildContext context) {
     // inicio da tela de layout
+
     return Scaffold(
         appBar: AppBar(
           title: Text("Busca de Pets"),
@@ -43,14 +50,21 @@ class _SearchPetState extends State<SearchPet> {
               Expanded(
                 child: StreamBuilder(
                   // função para pegar o documento com o mesmo nome do texto QRCode
-                  stream: Firestore.instance.collection("pets").where("idPet", isEqualTo: textSearch).snapshots(),
+                  stream: Firestore.instance
+                      .collection("pets")
+                      .where("idPet", isEqualTo: textSearch)
+                      .snapshots(),
                   builder: (context, snapshot) {
                     // verifica se a busca é nula e retorna um indicador de progresso
-                    if(snapshot.data == null) return Center(child: CircularProgressIndicator());
-                    switch(snapshot.connectionState){
+                    if (snapshot.data == null)
+                      return Center(child: CircularProgressIndicator());
+
+                    switch (snapshot.connectionState) {
                       case ConnectionState.none:
                       //case ConnectionState.waiting:
-                        return Center(child: CircularProgressIndicator(),);
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
                       default:
                         return ListView.builder(
                             scrollDirection: Axis.vertical,
@@ -58,139 +72,39 @@ class _SearchPetState extends State<SearchPet> {
                             itemCount: snapshot.data.documents.length,
                             itemBuilder: (context, index) {
                               var tamanho = snapshot.data.documents.length;
-                              if(snapshot.data.documents == null){
-                                return Container(child: Center(child: Text("Nenhum dado"),),);
+
+                              if (snapshot.data.documents == null) {
+                                return Container(
+                                  child: Center(
+                                    child: Text("Nenhum dado"),
+                                  ),
+                                );
                               }
-                              return Container(child: BuscaPets(snapshot.data.documents[index].data, tamanho));
-                            }
-                        );
+
+                              return Container(
+                                  child: CardPet(
+                                      snapshot.data.documents[index].data, false));
+                            });
                     }
                   },
                 ),
               ),
+
               // este botão retorna para o Main
+
               RaisedButton(
-                child: Text("Voltar ao menu principal!", style: TextStyle(color: Colors.white),),
-                onPressed: (){
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyApp()));
+                child: Text(
+                  "Voltar ao menu principal!",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => MyApp()));
                 },
                 color: Theme.of(context).primaryColor,
               )
             ],
           ),
-        )
-    );
-  }
-}
-
-class BuscaPets extends StatelessWidget {
-
-  // assim como na tela de listagem (MyApp - main), essa faz a mesma coisa, pega os dados e exibe dentro de um card
-  final Map<dynamic, dynamic> data;
-
-  final int tamanho;
-
-  BuscaPets(this.data, this.tamanho);
-
-  @override
-  Widget build(BuildContext context) {
-    return tamanho == null || tamanho <= 1 ? Center(child: Text("Nenhum dado")) : Card(
-      margin: EdgeInsets.only(bottom: 20),
-      elevation: 4,
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-                width: 350,
-                height: 200,
-                child: Image.network(
-                  data["img"],
-                  fit: BoxFit.cover,
-                )),
-            Align(
-              alignment: Alignment.topRight,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Text(
-                    "Publicado em: " + data["datapublicacao"],
-                    textAlign: TextAlign.right,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: <Widget>[
-                Text(
-                  "Atende pelo nome de: ",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                Text(data["nome"], style: TextStyle(fontSize: 20))
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: <Widget>[
-                Text("Raça: ",
-                    style:
-                    TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                Text(data["raca"], style: TextStyle(fontSize: 20))
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            RichText(
-              text: TextSpan(
-                text: '',
-                style: DefaultTextStyle.of(context).style,
-                children: <TextSpan>[
-                  TextSpan(
-                      text: 'Descrição: ',
-                      style:
-                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  TextSpan(
-                      text: data["descricao"],
-                      style: TextStyle(
-                        fontSize: 20,
-                      )),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Text("Cidade: " + data["cidade"],
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text("Contato: " + data["telefone"], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-
-                // neste IconButton, o usuário pode ligar para o número que está sendo exibido no Card
-                IconButton(
-                  hoverColor: Colors.red,
-                  icon: Icon(Icons.call, size: 30, color: Colors.green),
-                  onPressed: (){
-                    var telefone = data["telefone"];
-                    launch('tel:$telefone');
-                  },
-                )
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-          ]),
-    );
+        ));
   }
 }

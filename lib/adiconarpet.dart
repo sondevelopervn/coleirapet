@@ -8,11 +8,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AddPet extends StatefulWidget {
+  final String userID;
+
+  const AddPet(this.userID);
+
   @override
-  _AddPetState createState() => _AddPetState();
+  _AddPetState createState() => _AddPetState(userID);
 }
 
 class _AddPetState extends State<AddPet> {
+
+  final String userID;
+
+  _AddPetState(this.userID);
 
   // String que recebe a URL de download da imagem
   String urlImage;
@@ -29,58 +37,75 @@ class _AddPetState extends State<AddPet> {
   // verifica se existe uma imagem selecionada
   bool imgSelected = false;
 
-
   // função que captura a imagem
+
   Future<File> getImageFromCamera() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {
       _pickedImage = image;
       imgSelected = true;
     });
+
     return image;
   }
 
-
   Future<File> getImageFromGallery() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
     setState(() {
       _pickedImage = image;
+
       imgSelected = true;
     });
+
     return image;
   }
 
   // informa o alert para o usuário apagar ou não a foto
-  void alertImage(){
+
+  void alertImage() {
     showDialog(
         context: context,
-      builder: (BuildContext context){
+        builder: (BuildContext context) {
           return AlertDialog(
             title: Text("Deseja remover essa foto?"),
             content: Text("Esta ação não poderá ser desfeita."),
             actions: <Widget>[
               FlatButton(
-                child: Text("Cancelar", style: TextStyle(fontSize: 20,color: Colors.blue, fontWeight: FontWeight.bold),),
-                onPressed: (){
+                child: Text(
+                  "Cancelar",
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold),
+                ),
+                onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               FlatButton(
-                child: Text("Sim", style: TextStyle(fontSize: 20,color: Colors.red,fontWeight: FontWeight.bold),),
-                onPressed: (){
+                child: Text(
+                  "Sim",
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold),
+                ),
+                onPressed: () {
                   Navigator.of(context).pop();
-                    setState(() {
-                      return _pickedImage = null;
-                    });
+
+                  setState(() {
+                    return _pickedImage = null;
+                  });
                 },
               )
             ],
           );
-      }
-    );
+        });
   }
 
   // controladores para os TextFormField
+
   final _nomecontroller = TextEditingController();
   final _racacontroller = TextEditingController();
   final _sexocontroller = TextEditingController();
@@ -97,14 +122,22 @@ class _AddPetState extends State<AddPet> {
   @override
   Widget build(BuildContext context) {
     // inicio da tela de layou com o scaffold
+
     return Scaffold(
       key: _scaffoldKey,
+
       appBar: AppBar(
         title: Text("Adicionar Pet"),
         centerTitle: true,
       ),
+
       // aqui, verifica se está enviando a imagem, se estiver, ele retornará um indicador de envio, senão, retorna o Form
-      body: isSending == true ? Center(child: CircularProgressIndicator(),) : Form(
+
+      body: isSending == true
+          ? Center(
+        child: CircularProgressIndicator(),
+      )
+          : Form(
         key: _formKey,
         child: ListView(
           padding: EdgeInsets.all(15),
@@ -123,49 +156,51 @@ class _AddPetState extends State<AddPet> {
                 ),
               ],
             ),
+
             SizedBox(
               height: 15,
             ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 MaterialButton(
-                  child: Text("Tirar Foto"),
-                  onPressed: _pickedImage != null ? null : (){
-                  getImageFromCamera();
-                }),
+                    child: Text("Tirar Foto"),
+                    onPressed: _pickedImage != null
+                        ? null
+                        : () {
+                      getImageFromCamera();
+                    }),
                 MaterialButton(
-                  child: Text("Abrir Galeria"),
-                  onPressed: _pickedImage != null ? null :  (){
-                    getImageFromGallery();
-                })
+                    child: Text("Abrir Galeria"),
+                    onPressed: _pickedImage != null
+                        ? null
+                        : () {
+                      getImageFromGallery();
+                    })
               ],
             ),
-            _pickedImage != null ? Text("Pressione na imagem para remover", style: TextStyle(fontStyle: FontStyle.italic),)
-            : Padding(padding: EdgeInsets.zero,),
+
+            _pickedImage != null
+                ? Text(
+              "Pressione na imagem para remover",
+              style: TextStyle(fontStyle: FontStyle.italic),
+            )
+                : Padding(
+              padding: EdgeInsets.zero,
+            ),
+
             InkWell(
-                child: Align(
+              child: Align(
                   alignment: Alignment.topLeft,
+
                   // se a imagem foi selecionada, vai retornar a mesma em um Container,
+
                   // senão, vai retornar o campo para inserir a mesma
-                  child: _pickedImage == null ? Container(
-                    width: double.infinity,
-                    height: 200,
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: new BorderRadius.only(
-                            topLeft: const Radius.circular(25.0),
-                            topRight: const Radius.circular(25.0),
-                            bottomLeft: const Radius.circular(25.0),
-                            bottomRight: const Radius.circular(25.0),
-                        )
-                    ),
-                    child: Center(
-                      child: Text("+", style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold, color: Colors.white),
-                      ),
-                    ),
-                  ) : Container(
+
+                  child: _pickedImage == null
+                      ? Container(
                     width: double.infinity,
                     height: 200,
                     decoration: BoxDecoration(
@@ -175,35 +210,66 @@ class _AddPetState extends State<AddPet> {
                           topRight: const Radius.circular(25.0),
                           bottomLeft: const Radius.circular(25.0),
                           bottomRight: const Radius.circular(25.0),
-                        )
+                        )),
+                    child: Center(
+                      child: Text(
+                        "+",
+                        style: TextStyle(
+                            fontSize: 60,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
                     ),
-                    child: Image.file(_pickedImage, fit: BoxFit.cover),
                   )
-                ),
-              // nesse on tap, está chamando a função para a abrir a camera
-              onTap: (){
-                  if(_pickedImage == null) {
-                    getImageFromCamera();
-                  } else {
-                    alertImage();
-                  }
-              },
-            ),
-            SizedBox(height: 15,),
+                      : Container(
+                    width: double.infinity,
+                    height: 200,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: new BorderRadius.only(
+                          topLeft: const Radius.circular(25.0),
+                          topRight: const Radius.circular(25.0),
+                          bottomLeft: const Radius.circular(25.0),
+                          bottomRight: const Radius.circular(25.0),
+                        )),
+                    child:
+                    Image.file(_pickedImage, fit: BoxFit.cover),
+                  )),
 
-            //inicio dos TextFormField
-            // controller serve para pegar o texto do campo
-            TextFormField(
-              controller: _nomecontroller,
-              decoration: InputDecoration(hintText: "atende pelo nome de"),
-              validator: (text) {
-                //com o controller, se o campo for vazío, vai retornar uma mensagem ao clicar em enviar (todos os TextFormField possuem isso)
-                if (text.isEmpty) return "campo inválido";
+              // nesse on tap, está chamando a função para a abrir a camera
+
+              onTap: () {
+                if (_pickedImage == null) {
+                  getImageFromCamera();
+                } else {
+                  alertImage();
+                }
               },
             ),
+
             SizedBox(
               height: 15,
             ),
+
+            //inicio dos TextFormField
+
+            // controller serve para pegar o texto do campo
+
+            TextFormField(
+              controller: _nomecontroller,
+              decoration:
+              InputDecoration(hintText: "atende pelo nome de"),
+              validator: (text) {
+                //com o controller, se o campo for vazío, vai retornar uma mensagem ao clicar em enviar (todos os TextFormField possuem isso)
+
+                if (text.isEmpty) return "campo inválido";
+              },
+            ),
+
+            SizedBox(
+              height: 15,
+            ),
+
             TextFormField(
               controller: _racacontroller,
               decoration: InputDecoration(hintText: "raça"),
@@ -211,9 +277,11 @@ class _AddPetState extends State<AddPet> {
                 if (text.isEmpty) return "campo inválido";
               },
             ),
+
             SizedBox(
               height: 15,
             ),
+
             TextFormField(
               controller: _sexocontroller,
               decoration: InputDecoration(hintText: "macho ou fêmea"),
@@ -221,20 +289,24 @@ class _AddPetState extends State<AddPet> {
                 if (text.isEmpty) return "campo inválido";
               },
             ),
+
             SizedBox(
               height: 15,
             ),
+
             TextFormField(
               controller: _desciptioncontroller,
-              decoration:
-                  InputDecoration(hintText: "coloque uma breve descrição"),
+              decoration: InputDecoration(
+                  hintText: "coloque uma breve descrição"),
               validator: (text) {
                 if (text.isEmpty) return "campo inválido";
               },
             ),
+
             SizedBox(
               height: 15,
             ),
+
             TextFormField(
               controller: _cidadecontroller,
               decoration: InputDecoration(hintText: "coloque a cidade"),
@@ -242,9 +314,11 @@ class _AddPetState extends State<AddPet> {
                 if (text.isEmpty) return "campo inválido";
               },
             ),
+
             SizedBox(
               height: 15,
             ),
+
             TextFormField(
               inputFormatters: [
                 WhitelistingTextInputFormatter.digitsOnly,
@@ -257,14 +331,17 @@ class _AddPetState extends State<AddPet> {
                 if (text.isEmpty) return "campo inválido";
               },
             ),
-            SizedBox(height: 10,),
+
+            SizedBox(
+              height: 10,
+            ),
+
             Align(
-              alignment: Alignment.bottomRight,
-              child:
-                MaterialButton(
+                alignment: Alignment.bottomRight,
+                child: MaterialButton(
                   // botão que limpa a tela, apaga o texto dos campos de textos e deixa como null e false as informações de imagem
                   child: Text("Limpar"),
-                  onPressed: (){
+                  onPressed: () {
                     setState(() {
                       _nomecontroller.text = "";
                       _racacontroller.text = "";
@@ -276,11 +353,12 @@ class _AddPetState extends State<AddPet> {
                       imgSelected = false;
                     });
                   },
-                )
-            ),
+                )),
+
             SizedBox(
               height: 25,
             ),
+
             SizedBox(
               height: 50,
               child: RaisedButton(
@@ -291,28 +369,39 @@ class _AddPetState extends State<AddPet> {
                 ),
                 onPressed: () {
                   // verifica se a imagem foi ou não inserida, se não foi, vai retornar um snackBar
-                  if(urlImage == ""){
+                  if (urlImage == "") {
                     _scaffoldKey.currentState.showSnackBar(SnackBar(
                       content: Text("Imagem não inserida!"),
                       duration: Duration(seconds: 5),
                       backgroundColor: Colors.red,
                     ));
-                  }
-                  else if (_formKey.currentState.validate()) {
+                  } else if (_formKey.currentState.validate()) {
                     // se a imagem foi inserida e todos os campos preenchidos, vai entrar nesse if
+
                     // vai chamar a função enviar(context), função responsável pelo envio da imagem ao Storage
+
                     enviar(context);
+
                     setState(() {
                       // informa que está enviando para poder exibir o indicador na tela
+
                       isSending = true;
                     });
                   }
                 },
               ),
             ),
-            SizedBox(height: 10,),
-            Text("O processo de envio pode demorar*", style: TextStyle(fontStyle: FontStyle.italic,
-                color: Theme.of(context).primaryColor),)
+
+            SizedBox(
+              height: 10,
+            ),
+
+            Text(
+              "O processo de envio pode demorar*",
+              style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  color: Theme.of(context).primaryColor),
+            )
           ],
         ),
       ),
@@ -320,11 +409,10 @@ class _AddPetState extends State<AddPet> {
   }
 
   Future enviar(BuildContext context) async {
-
     // nesta função, primeiro pega a imagem e envia para o storage, depois retorna a URL de download para poder salvar no Firestore
-
-    StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(DateTime.now().millisecondsSinceEpoch.toString()); // designa o local e nome do arquivo
-    StorageUploadTask uploadTask =  firebaseStorageRef.putFile(_pickedImage); // envia foto
+    StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(
+        DateTime.now().millisecondsSinceEpoch.toString()); // designa o local e nome do arquivo
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_pickedImage); // envia foto
     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete; // aguardar finalizar o envio
     String url = await taskSnapshot.ref.getDownloadURL(); // recupera a URL de download
     String idImg = await taskSnapshot.ref.getName(); // recupera o nome da imagem
@@ -334,11 +422,9 @@ class _AddPetState extends State<AddPet> {
       urlImage = url;
       nameDoc = idImg;
     });
-
     // formatando data para exibir como data de publicação
     DateTime now = DateTime.now();
-    String formattedDate =
-    DateFormat(' dd/MM/y - HH:mm').format(now);
+    String formattedDate = DateFormat(' dd/MM/y - HH:mm').format(now);
     savePet(formattedDate, url);
   }
 
@@ -355,16 +441,18 @@ class _AddPetState extends State<AddPet> {
       "telefone": _telefonecontroller.text,
       "img": url, // nome da imagem recuperada na função enviar(context)
       "datapublicacao": date.toString(), // data formatada
-      "idPet": nameDoc // nome da imagem no storage
+      "idPet": nameDoc, // nome da imagem no storage
+      "idUser": userID // id do usuário logado
 
       // o nome da imagem no Storage foi um meio para poder fazer a pesquisa de um uníco item posteriormente
-
     });
+
     _scaffoldKey.currentState.showSnackBar(SnackBar(
       content: Text("Pet inserido com sucesso!"),
       duration: Duration(seconds: 5),
       backgroundColor: Colors.green,
     ));
+
     Navigator.of(context).pop();
   }
 }
