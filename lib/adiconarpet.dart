@@ -6,6 +6,7 @@ import 'package:brasil_fields/formatter/telefone_input_formatter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:grouped_buttons/grouped_buttons.dart';
 
 class AddPet extends StatefulWidget {
   final String userID;
@@ -203,14 +204,7 @@ class _AddPetState extends State<AddPet> {
                       ? Container(
                     width: double.infinity,
                     height: 200,
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: new BorderRadius.only(
-                          topLeft: const Radius.circular(25.0),
-                          topRight: const Radius.circular(25.0),
-                          bottomLeft: const Radius.circular(25.0),
-                          bottomRight: const Radius.circular(25.0),
-                        )),
+                    color: Theme.of(context).primaryColor,
                     child: Center(
                       child: Text(
                         "+",
@@ -224,16 +218,7 @@ class _AddPetState extends State<AddPet> {
                       : Container(
                     width: double.infinity,
                     height: 200,
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: new BorderRadius.only(
-                          topLeft: const Radius.circular(25.0),
-                          topRight: const Radius.circular(25.0),
-                          bottomLeft: const Radius.circular(25.0),
-                          bottomRight: const Radius.circular(25.0),
-                        )),
-                    child:
-                    Image.file(_pickedImage, fit: BoxFit.cover),
+                    child: Image.file(_pickedImage, fit: BoxFit.cover),
                   )),
 
               // nesse on tap, está chamando a função para a abrir a camera
@@ -250,9 +235,7 @@ class _AddPetState extends State<AddPet> {
             SizedBox(
               height: 15,
             ),
-
             //inicio dos TextFormField
-
             // controller serve para pegar o texto do campo
 
             TextFormField(
@@ -268,7 +251,6 @@ class _AddPetState extends State<AddPet> {
             SizedBox(
               height: 15,
             ),
-
             TextFormField(
               controller: _racacontroller,
               decoration: InputDecoration(hintText: "raça"),
@@ -281,13 +263,23 @@ class _AddPetState extends State<AddPet> {
               height: 15,
             ),
 
-            TextFormField(
-              controller: _sexocontroller,
-              decoration: InputDecoration(hintText: "macho ou fêmea"),
-              validator: (text) {
-                if (text.isEmpty) return "campo inválido";
-              },
+            Text("Sexo:", style: TextStyle(color: Colors.grey),),
+            RadioButtonGroup(
+                orientation: GroupedButtonsOrientation.VERTICAL,
+
+                labels: <String>[
+                  "Macho",
+                  "Fêmea",
+                ],
+                onSelected: (String selected) => _sexocontroller.text = selected
             ),
+//            TextFormField(
+//              controller: _sexocontroller,
+//              decoration: InputDecoration(hintText: "macho ou fêmea"),
+//              validator: (text) {
+//                if (text.isEmpty) return "campo inválido";
+//              },
+//            ),
 
             SizedBox(
               height: 15,

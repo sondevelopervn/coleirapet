@@ -1,11 +1,7 @@
 import 'package:coleirapet/login.dart';
-
 import 'package:coleirapet/scan_qrcode.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:scoped_model/scoped_model.dart';
-
 import 'meus_pets.dart';
 import 'models/loginmodel.dart';
 
@@ -112,7 +108,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 },
               );
             },
-          )
+          ),
         ],
       ),
     );

@@ -5,6 +5,7 @@ import 'package:coleirapet/meus_pets.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:grouped_buttons/grouped_buttons.dart';
 
 class EditPet extends StatefulWidget {
 
@@ -153,12 +154,15 @@ class _EditedPetState extends State<EditedPet> {
             height: 15,
           ),
 
-          TextFormField(
-            controller: _sexocontroller,
-            decoration: InputDecoration(hintText: "macho ou fêmea"),
-            validator: (text) {
-              if (text.isEmpty) return "campo inválido";
-            },
+          Text("Sexo:", style: TextStyle(color: Colors.grey),),
+          RadioButtonGroup(
+              picked: _sexocontroller.text,
+              orientation: GroupedButtonsOrientation.VERTICAL,
+              labels: <String>[
+                "Macho",
+                "Fêmea",
+              ],
+              onSelected: (String selected) => _sexocontroller.text = selected
           ),
 
           SizedBox(
