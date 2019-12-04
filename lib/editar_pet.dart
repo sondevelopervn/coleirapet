@@ -162,7 +162,8 @@ class _EditedPetState extends State<EditedPet> {
                 "Macho",
                 "Fêmea",
               ],
-              onSelected: (String selected) => _sexocontroller.text = selected
+              onSelected: (String selected) => selected != "" ?
+                _sexocontroller.text = selected : "Não Informado",
           ),
 
           SizedBox(
@@ -246,6 +247,7 @@ class _EditedPetState extends State<EditedPet> {
                 child: Text("Salvar", style: TextStyle(color: Colors.white, fontSize: 20),),
                 color: Theme.of(context).primaryColor,
                 onPressed: (){
+                  print(petID);
                   if (_keyForm.currentState.validate()) {
                     savePet(petID);
                     setState(() {
@@ -254,6 +256,9 @@ class _EditedPetState extends State<EditedPet> {
                     });
                   }
                 },
+              ),
+              SizedBox(
+                height: 25,
               ),
             ],
           )
@@ -270,7 +275,7 @@ class _EditedPetState extends State<EditedPet> {
       "sexo": _sexocontroller.text,
       "descricao": _desciptioncontroller.text,
       "cidade": _cidadecontroller.text,
-      "sexo": _sexocontroller.text,
+      "sexo": _sexocontroller.text == "" ? "Não informado" : _sexocontroller.text,
       "telefone": _telefonecontroller.text,
     });
 

@@ -421,14 +421,14 @@ class _AddPetState extends State<AddPet> {
 
   Future savePet(String date, String url) async {
     // inicia o envio para o firestore e salva no Firestore com o nome da imagem enviada
-    await Firestore.instance.collection("pets").document().setData({
+    await Firestore.instance.collection("pets").document(nameDoc).setData({
       // abaixo, onde está ...controller.text são os campos de texto,
       "nome": _nomecontroller.text,
       "raca": _racacontroller.text,
       "sexo": _sexocontroller.text,
       "descricao": _desciptioncontroller.text,
       "cidade": _cidadecontroller.text,
-      "sexo": _sexocontroller.text,
+      "sexo": _sexocontroller.text == "" ? "Não informado" : _sexocontroller.text,
       "telefone": _telefonecontroller.text,
       "img": url, // nome da imagem recuperada na função enviar(context)
       "datapublicacao": date.toString(), // data formatada
