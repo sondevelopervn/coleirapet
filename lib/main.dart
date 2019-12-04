@@ -4,6 +4,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'adiconarpet.dart';
 import 'drawer.dart';
+import 'login.dart';
 import 'models/loginmodel.dart';
 
 void main() => runApp(MyApp());
@@ -82,10 +83,18 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AddPet()));
+      floatingActionButton: ScopedModelDescendant<UserModel>(
+        builder: (context, child, model){
+          return FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: (){
+              if(model.isLoggedIn()){
+                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AddPet()));
+              } else {
+               Navigator.of(context).push(MaterialPageRoute(builder: (context)=>LoginScreen()));
+              }
+            },
+          );
         },
       ),
       drawer: DrawerScreen(),

@@ -40,6 +40,46 @@ class _AddPetState extends State<AddPet> {
     return image;
   }
 
+
+  Future<File> getImageFromGallery() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _pickedImage = image;
+      imgSelected = true;
+    });
+    return image;
+  }
+
+  // informa o alert para o usuário apagar ou não a foto
+  void alertImage(){
+    showDialog(
+        context: context,
+      builder: (BuildContext context){
+          return AlertDialog(
+            title: Text("Deseja remover essa foto?"),
+            content: Text("Esta ação não poderá ser desfeita."),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Cancelar", style: TextStyle(fontSize: 20,color: Colors.blue, fontWeight: FontWeight.bold),),
+                onPressed: (){
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: Text("Sim", style: TextStyle(fontSize: 20,color: Colors.red,fontWeight: FontWeight.bold),),
+                onPressed: (){
+                  Navigator.of(context).pop();
+                    setState(() {
+                      return _pickedImage = null;
+                    });
+                },
+              )
+            ],
+          );
+      }
+    );
+  }
+
   // controladores para os TextFormField
   final _nomecontroller = TextEditingController();
   final _racacontroller = TextEditingController();
@@ -86,33 +126,68 @@ class _AddPetState extends State<AddPet> {
             SizedBox(
               height: 15,
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                MaterialButton(
+                  child: Text("Tirar Foto"),
+                  onPressed: _pickedImage != null ? null : (){
+                  getImageFromCamera();
+                }),
+                MaterialButton(
+                  child: Text("Abrir Galeria"),
+                  onPressed: _pickedImage != null ? null :  (){
+                    getImageFromGallery();
+                })
+              ],
+            ),
+            _pickedImage != null ? Text("Pressione na imagem para remover", style: TextStyle(fontStyle: FontStyle.italic),)
+            : Padding(padding: EdgeInsets.zero,),
             InkWell(
                 child: Align(
                   alignment: Alignment.topLeft,
-                  // se a imagem foi selecionada, vai retornar um Text, senão, vai retornar o campo para inserir a mesma
-                  child: !imgSelected ? Container(
-                    width: 150,
-                    height: 100,
-                    color: Colors.grey,
+                  // se a imagem foi selecionada, vai retornar a mesma em um Container,
+                  // senão, vai retornar o campo para inserir a mesma
+                  child: _pickedImage == null ? Container(
+                    width: double.infinity,
+                    height: 200,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: new BorderRadius.only(
+                            topLeft: const Radius.circular(25.0),
+                            topRight: const Radius.circular(25.0),
+                            bottomLeft: const Radius.circular(25.0),
+                            bottomRight: const Radius.circular(25.0),
+                        )
+                    ),
                     child: Center(
-                      child: Text("+", style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold, color: Colors.white),
+                      child: Text("+", style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                     ),
                   ) : Container(
-                    child: InkWell( child: Text("* Imagem selecionada, clique aqui se deseja alterar * ",
-                        style: TextStyle(fontStyle: FontStyle.italic, color: Theme.of(context).primaryColor)),
-                      onTap: (){
-                        setState(() {
-                          // seta os valores da variáveis como null e false
-                          _pickedImage = null;
-                          imgSelected = false;
-                        });
-                      }
+                    width: double.infinity,
+                    height: 200,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: new BorderRadius.only(
+                          topLeft: const Radius.circular(25.0),
+                          topRight: const Radius.circular(25.0),
+                          bottomLeft: const Radius.circular(25.0),
+                          bottomRight: const Radius.circular(25.0),
+                        )
                     ),
-                  ),
+                    child: Image.file(_pickedImage, fit: BoxFit.cover),
+                  )
                 ),
               // nesse on tap, está chamando a função para a abrir a camera
-              onTap: getImageFromCamera,
+              onTap: (){
+                  if(_pickedImage == null) {
+                    getImageFromCamera();
+                  } else {
+                    alertImage();
+                  }
+              },
             ),
             SizedBox(height: 15,),
 
