@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:scoped_model/scoped_model.dart';
-
 import 'criarconta.dart';
-
 import 'main.dart';
-
 import 'models/loginmodel.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -15,23 +11,18 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   // controller para os campos TextFormField
-
   final _emailController = TextEditingController();
-
   final _passController = TextEditingController();
 
   // key para o Scaffold
-
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   // key para o Form
-
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     // inicio da tela de layout
-
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
@@ -53,28 +44,23 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
 
         // aqui também utiliza o ScopedModelDescendant para verificar os dados do usuário
-
-        body:
-        ScopedModelDescendant<UserModel>(builder: (context, child, model) {
+        body: ScopedModelDescendant<UserModel>(
+            builder: (context, child, model) {
           if (model.isLoading)
             return Center(
               child: CircularProgressIndicator(),
             );
-
           return Form(
             key: _formKey,
             child: ListView(
               padding: EdgeInsets.all(16),
               children: <Widget>[
                 TextFormField(
-                  //com o controller, se o campo for vazío, vai retornar uma mensagem ao clicar em enviar (todos os TextFormField possuem isso)
-
+                  //com o controller, se o campo for vazío, vai retornar uma mensagem ao clicar em enviar
+                  // (todos os TextFormField possuem isso)
                   controller: _emailController,
-
                   decoration: InputDecoration(hintText: "e-mail"),
-
                   keyboardType: TextInputType.emailAddress,
-
                   validator: (text) {
                     if (text.isEmpty || !text.contains("@"))
                       return "E-mail inválido";
@@ -104,7 +90,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ));
                       } else {
                         model.recoverPass(_emailController.text);
-
                         _scaffoldKey.currentState.showSnackBar(SnackBar(
                           content: Text("Confira seu e-mail!"),
                           backgroundColor: Colors.red,
@@ -127,9 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: RaisedButton(
                     onPressed: () {
                       if (_formKey.currentState.validate()) {}
-
                       // chama a função signIn que está em loginmodel.dart
-
                       model.signIn(
                           email: _emailController.text,
                           pass: _passController.text,
@@ -151,14 +134,12 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   // essa função é responsável por informar ao usuário que foi criado com sucesso
-
   void _onSuccess() {
     Navigator.of(context)
         .pushReplacement(MaterialPageRoute(builder: (context) => MyApp()));
   }
 
   // se houve algum erro no envio dos dados, apresentará esta mensagem
-
   void _onFail() {
     _scaffoldKey.currentState.showSnackBar(SnackBar(
       content: Text("Erro ao logar!"),

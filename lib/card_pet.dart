@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'editar_pet.dart';
 
+
+// criou-se essa classe card pet pois os códigos de exibição dos dados do Firebase estavam repetindo
+// assim fica mais fazer a chamada e deixa o código limpo
 class CardPet extends StatefulWidget {
 
+  // recebe os dados passados por paramêtro (dados do usuário e se foi chamado pela tela de editar)
   final Map<dynamic, dynamic> data;
   final bool edit;
 
@@ -15,6 +19,7 @@ class CardPet extends StatefulWidget {
 
 class _CardPetState extends State<CardPet> {
 
+  // recebe os dados passados por paramêtro (dados do usuário e se foi chamado pela tela de editar)
   final Map<dynamic, dynamic> data;
 
   final bool edit;
@@ -23,12 +28,14 @@ class _CardPetState extends State<CardPet> {
 
   @override
   Widget build(BuildContext context) {
+    // inicio da tela de layout
     return Card(
       elevation: 10,
       child: Padding(
         padding: EdgeInsets.zero,
         child: InkWell(
           onTap: edit != true ? null : (){
+            // navega para a tela de Edição passando como parametro o ID do PET
             Navigator.of(context).push(MaterialPageRoute(builder: (context)=>EditPet(data["idPet"])));
           },
           child: Column(

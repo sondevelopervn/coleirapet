@@ -16,23 +16,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // inicio do aplicativo
-
     // antes de tudo, o ScopedModel<UserData> está inseri aí para poder ser acessado de todas as classe que estiver abaixo
-
     // portanto, tudo que estiver dentro do MaterialApp tem acesso aos dados do usuário utilizando o ScopedModelDescendant
 
     return ScopedModel<UserModel>(
       model: UserModel(), // definindo o modelo do ScopedModel
-
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-
         title: 'ColeiraPet', // nome do app
-
         theme: ThemeData(
           primarySwatch: Colors.deepOrange, // definindo uma cor padrão
         ),
-
         home: MyHomePage(title: 'Coleirapet'),
       ),
     );
@@ -52,7 +46,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     // inicio da tela de layout
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -64,20 +57,16 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Expanded(
               // função StreamBuilder que pega os dados do Firestore e se houver alguma mudança atualiza automaticamente
-
               // stream, fica ouvindo o Firestore
-
               child: StreamBuilder(
                 stream: Firestore.instance.collection("pets").snapshots(),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.none:
-
                     case ConnectionState.waiting:
                       return Center(
                         child: CircularProgressIndicator(),
                       );
-
                     default:
                       return ListView.builder(
                           scrollDirection: Axis.vertical,
@@ -85,6 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           itemCount: snapshot.data.documents.length,
                           itemBuilder: (context, index) {
                             return Container(
+                              // chamando a classe CardPet passando o edit como false
                                 child: CardPet(
                                     snapshot.data.documents[index].data, false));
                           });
@@ -97,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: ScopedModelDescendant<UserModel>(
         builder: (context, child, model) {
+          // este FAB verifica se o usuário está logado ou não para permitir acessar a tela de cadastro de pet
           return FloatingActionButton(
             child: Icon(Icons.add),
             onPressed: () {

@@ -121,8 +121,9 @@ class _EditedPetState extends State<EditedPet> {
 
   @override
   Widget build(BuildContext context) {
-//    _nomecontroller.text = data["nome"];
+    // _nomecontroller.text = data["nome"];
 
+    // se está enviando alguma atualiação para o firebase, vai retornar um indicador de progresso, senão retornará o form
     return isSending == true ? Center(child: CircularProgressIndicator(),) : Form(
       key: _keyForm,
       child: ListView(
@@ -135,7 +136,8 @@ class _EditedPetState extends State<EditedPet> {
             decoration:
             InputDecoration(hintText: "atende pelo nome de"),
             validator: (text) {
-              //com o controller, se o campo for vazío, vai retornar uma mensagem ao clicar em enviar (todos os TextFormField possuem isso)
+              //com o controller, se o campo for vazío, vai retornar uma mensagem ao clicar em enviar
+              // (todos os TextFormField possuem isso)
               if (text.isEmpty) return "campo inválido";
             },
           ),
@@ -178,11 +180,9 @@ class _EditedPetState extends State<EditedPet> {
               if (text.isEmpty) return "campo inválido";
             },
           ),
-
           SizedBox(
             height: 15,
           ),
-
           TextFormField(
             controller: _cidadecontroller,
             decoration: InputDecoration(hintText: "coloque a cidade"),
@@ -190,11 +190,9 @@ class _EditedPetState extends State<EditedPet> {
               if (text.isEmpty) return "campo inválido";
             },
           ),
-
           SizedBox(
             height: 15,
           ),
-
           TextFormField(
             inputFormatters: [
               WhitelistingTextInputFormatter.digitsOnly,
@@ -207,11 +205,9 @@ class _EditedPetState extends State<EditedPet> {
               if (text.isEmpty) return "campo inválido";
             },
           ),
-
           SizedBox(
             height: 10,
           ),
-
           Align(
               alignment: Alignment.bottomRight,
               child: MaterialButton(
@@ -243,7 +239,6 @@ class _EditedPetState extends State<EditedPet> {
                 child: Text("Salvar", style: TextStyle(color: Colors.white, fontSize: 20),),
                 color: Theme.of(context).primaryColor,
                 onPressed: (){
-                  print(petID);
                   if (_keyForm.currentState.validate()) {
                     savePet(petID);
                     setState(() {
@@ -274,10 +269,10 @@ class _EditedPetState extends State<EditedPet> {
       "sexo": _sexocontroller.text == "" ? "Não informado" : _sexocontroller.text,
       "telefone": _telefonecontroller.text,
     });
-
     Navigator.of(context).pop();
   }
 
+  // função que realiza a exclusão do pet no Firebase
   void excluirAlert(String petID) {
     showDialog(
         context: context,
@@ -307,10 +302,9 @@ class _EditedPetState extends State<EditedPet> {
                       fontWeight: FontWeight.bold),
                 ),
                 onPressed: () async {
-                  final StorageReference ref = FirebaseStorage.instance.ref().child(petID);
-                  await ref.delete();
-                  await Firestore.instance.collection("pets").document(petID).delete();
-
+                  final StorageReference ref = FirebaseStorage.instance.ref().child(petID); // identifica a foto no Storage
+                  await ref.delete(); // primeiramente, exclui a foto do Storage
+                  await Firestore.instance.collection("pets").document(petID).delete(); // após deletado no Storage, exclui no Firesto
                   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyApp()));
                 },
               )
@@ -325,6 +319,7 @@ class _EditedPetState extends State<EditedPet> {
     super.dispose();
   }
 
+  // função que inicia os valores dos TextFormField
   @override
   void initState() {
     _nomecontroller.text = data["nome"];

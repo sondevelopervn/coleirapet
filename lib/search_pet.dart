@@ -1,19 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter/material.dart';
-
-import 'package:url_launcher/url_launcher.dart';
-
 import 'card_pet.dart';
 import 'main.dart';
 
 class SearchPet extends StatefulWidget {
   // variável para receber o dado do QRCode
-
   final textScanner;
 
   // contrutor da classe
-
   const SearchPet(this.textScanner);
 
   @override
@@ -22,21 +16,17 @@ class SearchPet extends StatefulWidget {
 
 class _SearchPetState extends State<SearchPet> {
   // aqui é exibido o texto do QRCode
-
   final String textSearch;
 
   // verifica se possui algum texto
-
   bool qrOk = false;
 
   // contrutor da classe
-
   _SearchPetState(this.textSearch);
 
   @override
   Widget build(BuildContext context) {
     // inicio da tela de layout
-
     return Scaffold(
         appBar: AppBar(
           title: Text("Busca de Pets"),
@@ -71,8 +61,6 @@ class _SearchPetState extends State<SearchPet> {
                             shrinkWrap: true,
                             itemCount: snapshot.data.documents.length,
                             itemBuilder: (context, index) {
-                              var tamanho = snapshot.data.documents.length;
-
                               if (snapshot.data.documents == null) {
                                 return Container(
                                   child: Center(
@@ -80,8 +68,8 @@ class _SearchPetState extends State<SearchPet> {
                                   ),
                                 );
                               }
-
                               return Container(
+                                // chamando a classe CardPet passando o edit como false
                                   child: CardPet(
                                       snapshot.data.documents[index].data, false));
                             });
@@ -91,7 +79,6 @@ class _SearchPetState extends State<SearchPet> {
               ),
 
               // este botão retorna para o Main
-
               RaisedButton(
                 child: Text(
                   "Voltar ao menu principal!",
