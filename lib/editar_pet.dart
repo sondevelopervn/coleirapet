@@ -1,5 +1,6 @@
 import 'package:brasil_fields/formatter/telefone_input_formatter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coleirapet/card_pet.dart';
 import 'package:coleirapet/main.dart';
 import 'package:coleirapet/meus_pets.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -269,7 +270,7 @@ class _EditedPetState extends State<EditedPet> {
       "sexo": _sexocontroller.text == "" ? "Não informado" : _sexocontroller.text,
       "telefone": _telefonecontroller.text,
     });
-    Navigator.of(context).pop();
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyApp()));
   }
 
   // função que realiza a exclusão do pet no Firebase
